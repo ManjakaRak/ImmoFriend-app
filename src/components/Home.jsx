@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import '../css/Home.css';
 import { Banier } from './Banier';
 import { PropertyCard } from './PropertyCard';
@@ -11,8 +11,18 @@ export function Home() {
     rootMargin: '0px',
     threshold: .1
   }
-  const handleIntersect = entries => {
+  
+  /**
+   * 
+   * @param {array IntersectionObserverEntry} entries
+   * @param {object IntersectionObserver} observer
+   */
+  const handleIntersect = (entries, observer) => {
+    /**
+     * @param {IntersectionObserverEntry} entry
+     */
     entries.forEach(entry => {
+      // make condition to active fading class
       if (entry.intersectionRatio > .1) {
         entry.target.classList.add('show-section');
       } else {
@@ -20,22 +30,20 @@ export function Home() {
       }
     });
   }
-  let observer = {};
+  // on start
   useEffect(() => {
-    observer = new IntersectionObserver(handleIntersect, options);
+    // instance obsever to observer elt to fade on
+    const observer = new IntersectionObserver(handleIntersect, options);
+    // select element to pass on observer
     const elts = document.querySelectorAll('.property-card');
     elts.forEach(elt => observer.observe(elt));
     return () => {
+      // observe element
       elts.forEach(elt => observer.unobserve(elt));
-      obsever = null;
     };
-      // console.log(observer)
-      
-  }, [observer]);
+  }, []);
   return <React.Fragment>
     <Banier currentPage="home" />
-    {/* <div className="fade"> */}
     <PropertyCard />
-    {/* </div> */}
   </React.Fragment>
 };

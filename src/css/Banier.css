@@ -17,8 +17,11 @@
 
 .carousel-indicators button {
   border-radius: 50%;
-  padding: .3em;
+  width: auto;
+  padding: .5em;
   border: none;
+  border: 3px solid '#ffc107';
+  background-color: rgba(0, 0, 0, 0.445);
   margin: 10px 20px;
 }
 
