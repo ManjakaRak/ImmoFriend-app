@@ -1,0 +1,33 @@
+.property-card {
+  margin-bottom: 200px;
+}
+.property-card:nth-child(odd) {
+  flex-direction: row-reverse;
+}
+.detail-content {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+.detail-button button {
+  background-color: white;
+  padding: 10px;
+  border: 1px solid rgb(116, 0, 0);
+  color: rgb(116, 0, 0);
+  transition: all .3s;
+}
+.detail-button button:hover {
+  background-color: rgb(116, 0, 0);
+  color: white;
+}
+
+/* fade property-card */
+.to-show {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.show-section {
+  opacity: 1;
+  transform: translateY(0);
+  transition: 1s ease;
+}

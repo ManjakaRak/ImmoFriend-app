@@ -1,0 +1,13 @@
+.nav-item a:hover, .navbar-brand a:hover, .active{
+  text-decoration: none;
+  color: rgb(66, 66, 66);
+}
+
+.nav-item a, .navbar-brand a {
+  color: rgb(235, 235, 235);
+}
+
+.navbar .navbar-toggler{
+  border-radius: 0;
+  background-color: #ffc107;
+}
