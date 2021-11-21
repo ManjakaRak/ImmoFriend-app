@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import '../css/Home.css';
 import { Banier } from './Banier';
+import { Footer } from './Footer';
 import { PropertyCard } from './PropertyCard';
 
 
@@ -17,7 +18,7 @@ export function Home() {
    * @param {array IntersectionObserverEntry} entries
    * @param {object IntersectionObserver} observer
    */
-  const handleIntersect = (entries, observer) => {
+  const handleIntersect = (entries) => {
     /**
      * @param {IntersectionObserverEntry} entry
      */
@@ -45,5 +46,6 @@ export function Home() {
   return <React.Fragment>
     <Banier currentPage="home" />
     <PropertyCard />
+    <Footer />
   </React.Fragment>
 };

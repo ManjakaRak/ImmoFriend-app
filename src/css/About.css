@@ -1,0 +1,21 @@
+footer {
+  background-color: rgb(36, 36, 36);
+  width: 100%;
+  color: silver;
+  padding: 50px;
+}
+.about {
+  min-height: 10vh;
+}
+.list-section {
+  display: flex;
+  color: silver;
+  justify-content: center;
+}
+.list-section a {
+  color: silver;
+}
+.list-section a:hover {
+  color:rgb(104, 103, 103);
+  text-decoration: none;
+}

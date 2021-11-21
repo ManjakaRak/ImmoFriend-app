@@ -3,8 +3,7 @@ import { Container, Image } from 'react-bootstrap';
 import '../css/PropertyCard.css';
 
 export const PropertyCard = function() {
-  return <Container className="mb-5">
-    <h2>Home page</h2>
+  return <Container className="mb-5 pt-5">
     <div className="row property-card to-show">
       <div className="img-content col-lg">
         <Image fluid={true} width="500" src="img/img1.jpg" />
