@@ -3,15 +3,20 @@ import { Link } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
 import '../css/NavbarApp.css';
 
-export function NavbarApp({ currentPage }) {
+export function NavbarApp({ currentPage, isPropertyDetail }) {
+
+  let defaultBgColor = '';
+  let defaultPosition = '';
+  isPropertyDetail ? defaultBgColor = 'rgb(0, 0, 0)' : defaultBgColor = 'rgba(0, 0, 0, .3)'
+  isPropertyDetail ? defaultPosition = 'relative' : defaultPosition = 'absolute'
   return (
     <Navbar expand="md" style={{
-      position: 'absolute',
+      position: defaultPosition,
       top: 0,
       left: 0,
       zIndex: 1000,
       width: '100%',
-      backgroundColor: 'rgba(0, 0, 0, .3)',
+      backgroundColor: defaultBgColor,
     }}>
       <Navbar.Brand>
         <Navbar.Text ><Link className="text-warning" to="/">ImmoFriend</Link></Navbar.Text>

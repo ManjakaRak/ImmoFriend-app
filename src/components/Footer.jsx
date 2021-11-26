@@ -12,13 +12,13 @@ export const Footer = () => {
         <h4 className="text-secondary">CONTACTEZ-NOUS</h4>
         <div className="contact-icon p-4 row">
           <div className="col-sm">
-            <a style={{color: 'rgb(29, 29, 255)', fontSize: '30px'}} href="www.facebook.com"><FontAwesomeIcon  icon={faFacebook}/></a>
+            <a style={{color: 'rgb(29, 29, 255)', fontSize: '30px'}}  href="https://www.facebook.com"><FontAwesomeIcon icon={faFacebook}/></a>
           </div>
           <div className="col-sm">
-            <a style={{color: 'rgb(182, 53, 53)', fontSize: '30px'}} href="www.instagram.com"><FontAwesomeIcon  icon={faInstagram}/></a>
+            <a style={{color: 'rgb(182, 53, 53)', fontSize: '30px'}}  href="https://www.instagram.com"><FontAwesomeIcon  icon={faInstagram}/></a>
           </div>
           <div className="col-sm">
-            <a style={{color: 'rgb(66, 195, 212)', fontSize: '30px'}} href="www.twitter.com"><FontAwesomeIcon  icon={faTwitter}/></a>
+            <a style={{color: 'rgb(66, 195, 212)', fontSize: '30px'}} href="https://www.twitter.com"><FontAwesomeIcon  icon={faTwitter}/></a>
           </div>
         </div>
       </div>
