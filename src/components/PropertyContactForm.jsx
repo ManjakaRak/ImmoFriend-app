@@ -15,12 +15,15 @@ const animeLabel = function(elements) {
   });
 }
 
-export function PropertyContactForm() {
+export function PropertyContactForm({context}) {
   const [values, setvalues] = useState({});
   const [hasError, sethaserror] = useState(false);
   const [errors, seterrors] = useState({});
 
-
+  /**
+   * 
+   * @param {event} event 
+   */
   const handleValue = (event) => {
     const value = event.target.value;
     const name = event.target.name;
@@ -28,14 +31,20 @@ export function PropertyContactForm() {
     // handle the changes to the values obj
     handleError(event, name, value);
 
+    // handle change
     setvalues({
       ...values,
       [name]: value
     });
-    // VALIDATE HERE
 
   }
 
+  /**
+   * 
+   * @param {event} event for set style of element in error case
+   * @param {string} name element name
+   * @param {string} value element value
+   */
   const handleError = (event, name, value) => {
     let error = '';
     switch (name) {
@@ -43,11 +52,18 @@ export function PropertyContactForm() {
         if (value.length < 4) {
           error = 'Le nom doit contenir au moin 4 lettres';
           event.target.setAttribute('style', 'border-color: red');
-          event.target.previousElementSibling.setAttribute('style', 'color: red')
+          event.target.previousElementSibling.setAttribute('style', 'color: red');
         } else {
           error = '';
-          event.target.previousElementSibling.setAttribute('style', 'color: grey')
-          event.target.setAttribute('style', 'border-color: silver')
+          event.target.previousElementSibling.setAttribute('style', 'color: grey');
+          event.target.setAttribute('style', 'border-color: silver');
+        }
+        break;
+      case 'phoneNumber':
+        if (value === '') {
+          error = 'Vous avez laissé le numero vide';
+          event.target.setAttribute('style', 'border-color: red');
+          event.target.previousElementSibling.setAttribute('style', 'color: red');
         }
         break;
       default:
@@ -59,14 +75,39 @@ export function PropertyContactForm() {
     });
   }
 
-  const handleSubmit = async (e) => {
+  /**
+   * 
+   * @param {event} e 
+   */
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (Object.values(errors).every(e => e === '') && Object.values(values).length === 2) {
-      console.log(values)
+    // check if error is empty and values arn't empty
+    if (!Object.keys(values).some(v => v === 'message')) {
+      // if message is not defined or empty -> set ''
+      setvalues({
+        ...values,
+        ['message']: ''
+      });
+    }
+    if (Object.values(errors).every(e => e === '') && Object.values(values).length === 4) {
+      // the message field is not required
+      // check the context
+      switch (context) {
+        case 'add-property':
+          console.log('add-property', values);
+          break;
+        case 'contact':
+          console.log('contact', values);
+          break;
+        default:
+          break;
+      }
     } else {
       sethaserror(true);
     }
   }
+
+  
   useEffect(() => {
     const fields = document.querySelectorAll('input');
     const textarea = document.querySelectorAll('textarea');
@@ -88,12 +129,14 @@ export function PropertyContactForm() {
       </div>
       <div className="field-container">
         <label className="label" htmlFor="phone-number">* tel</label>
-        <input name="phone_number" id="phone-number" type="text" />
-        {errors.email === undefined && hasError ? <small className="text-danger">Un numero de est obligatoir</small> : null}
+        <input onChange={handleValue} name="phoneNumber" id="phone-number" type="text" />
+        {errors.phoneNumber !== '' ? <small className="text-danger">{errors.phoneNumber}</small> : null}
+        {errors.phoneNumber === undefined && hasError ? <small className="text-danger">Un numero de est obligatoir</small> : null}
+        
       </div>
       <div className="field-container">
         <label htmlFor="message" className="label">* Message</label>
-        <textarea name="message" id="phone-number"></textarea>
+        <textarea onChange={handleValue} name="message" id="message"></textarea>
       </div>
       <button type="submit" className="btn btn-info">Envoyer</button>
     </form>

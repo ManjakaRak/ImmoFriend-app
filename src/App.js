@@ -4,6 +4,8 @@ import { About } from './components/About';
 import { Home } from './components/Home';
 import { PropertyDetail } from './components/PropertyDetail';
 import './App.css';
+import { AddPropertyForClient } from './components/AddPropertyForClient';
+import { AddClient } from './components/AddClient';
 
 const App = () => {
   const [title, setTitle] = useState('');
@@ -17,6 +19,8 @@ const App = () => {
         <Route path="/about" element={<About handleSetTitle={setTitle} />}/>
         <Route path="/property">
           <Route path=":id" element={<PropertyDetail />}/>
+          <Route path="add-client" element={<AddClient  handleSetTitle={setTitle} />}/>
+          <Route path="add-property" element={<AddPropertyForClient  handleSetTitle={setTitle} />}/>
         </Route>
       </Routes>
     </Router>

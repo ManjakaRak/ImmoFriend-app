@@ -62,7 +62,7 @@ export function PropertyDetail() {
       {/* FORM */}
       <div className="mt-5 mb-5 form">
         <h3 style={{ color: 'grey' }} className="mb-4">Faites-nous signe si ce bien vous interèsse</h3>
-        <PropertyContactForm/>
+        <PropertyContactForm context='contact'/>
       </div>
     </div>
     <Footer />

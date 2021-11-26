@@ -1,0 +1,24 @@
+.image-container {
+  position: relative;
+}
+
+#image, #image-clone {
+  position: absolute;
+  width: 130px;
+  height: 30px;
+  top: 0;
+  left: 0;
+}
+
+#image {
+  opacity: 0;
+  border: none;
+  z-index: 100;
+}
+#image:hover, #image-clone:hover {
+  cursor: pointer;
+}
+.image-container span {
+  position: absolute;
+  right: 0;
+}

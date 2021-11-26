@@ -28,7 +28,7 @@ export function NavbarApp({ currentPage, isPropertyDetail }) {
             <Link to="/"><span className={currentPage === 'home' ? 'active' : null}>Nos propriétées</span></Link>
           </Nav.Item>
            <Nav.Item className="p-3">
-            <Link to="/add-property">Ajoutez</Link>
+            <Link to="/property/add-client"><span className={currentPage === 'add-property' ? 'active' : null}>Ajoutez</span></Link>
           </Nav.Item>
           <Nav.Item className="p-3">
             <Link to="/about"><span className={currentPage === 'about' ? 'active' : null}>A propos</span></Link>
