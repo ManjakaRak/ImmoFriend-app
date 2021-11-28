@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
+
 export function PropertyCard() {
   return <div className="row property-card to-show">
     <div className="img-content col-lg">

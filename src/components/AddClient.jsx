@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Banier } from "./Banier";
 import { Footer } from './Footer';
-import '../css/PropertyContactForm.css';
+// import '../css/PropertyContactForm.css';
 import { PropertyContactForm } from "./PropertyContactForm";
 
 export function AddClient({ handleSetTitle }) {
@@ -10,7 +10,7 @@ export function AddClient({ handleSetTitle }) {
   });
   return <>
     <Banier currentPage="add-property" />
-    <div className="row m-0">
+    <div className="row p-5 m-0">
       <div className="col-sm form-container m-5">
         <PropertyContactForm context='add-property' />
       </div>

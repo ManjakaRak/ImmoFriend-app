@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import '../css/NewPropertyForm.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
-export function NewPropertyForm() {
+export function NewPropertyForm({ clientData }) {
 
   // animation label
   const animeLabel = function(elements) {
@@ -35,10 +36,21 @@ export function NewPropertyForm() {
     const name = event.target.name;
 
     // remove fakepath
-    name === 'image' ? value = value.slice(12) : null
+    // name === 'image' ? value = event.target.files[0] : null
     // handle the changes to the values obj
     handleError(event, name, value);
 
+    // handle change
+    setvalues({
+      ...values,
+      [name]: value
+    });
+  }
+  const handleImage = (event) => {
+    let name = event.target.name;
+    let value = event.target.files[0];
+
+    handleError(event, name, value);
     // handle change
     setvalues({
       ...values,
@@ -53,6 +65,7 @@ export function NewPropertyForm() {
    * @param {string} value element value
    */
   const handleError = (event, name, value) => {
+
     let error = '';
     switch (name) {
       case 'name':
@@ -73,7 +86,7 @@ export function NewPropertyForm() {
         break;
       case 'floor':
         values.room !== undefined && parseInt(value) > parseInt(values.room) ?
-          error = 'Le nombre de chambre doit etre superieur ou egal à celle du d\'etage' : null
+          error = 'Le nombre de chambre doit etre superieur ou egal à celle du d\'etage' : null;
         parseInt(value) === 0 ? error = 'Le nombre doit etre superieur a 0' : null;
         break;
       case 'constructionDate':
@@ -82,7 +95,7 @@ export function NewPropertyForm() {
         fdate > now ? error = 'Verifiez la date de construction': null
         break;
       case 'image':
-        !value.substr(-5).includes('.jpg') ? error = 'Choisissez une image de type JPG: ' : null
+        value === null ? error = "Ajoutez une photo" : null
         break;
       default:
         break;
@@ -92,19 +105,48 @@ export function NewPropertyForm() {
       [name]: error
     });
   }
-  
+
+  // SEND DATA
   /**
    * 
    * @param {event} e 
    */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(clientData)
     // check if error is empty and values arn't empty
     if (Object.values(errors).every(e => e === '') && Object.values(values).length === 8) {
-      console.log(values);
+
+      // image and file only can be send in formData NOT in object
+      const formData = new FormData();
+      formData.append('name', values.name);
+      formData.append('price', values.price);
+      formData.append('surface', values.surface);
+      formData.append('room', values.room);
+      formData.append('floor', values.floor);
+      formData.append('localisation', values.localisation);
+      formData.append('constructionDate', values.constructionDate);
+      formData.append('image', values.image);
+      formData.append('client', JSON.stringify(clientData));
+      
+      try {
+        const response = await axios({
+          url: 'http://localhost:5000/property/add-property',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          data: formData,
+          method: 'POST'
+        });
+        // console.log(response)
+      } catch (error) {
+        console.log(error)
+      }
+      // console.log(formData);
     } else {
       // dont submit
       sethaserror(true);
+      console.log('smth wrong');
     }
   }
 
@@ -114,8 +156,8 @@ export function NewPropertyForm() {
     animeLabel(fields);
     animeLabel(textarea);
   });
-  return <>
-    <form onSubmit={handleSubmit} encType="">
+  return <div className="my-form">
+    <form onSubmit={handleSubmit} encType="multipart/form-data">
       <div className="row">
         <div className="col-md field-container">
           <label className="label" htmlFor="name">* Nom du bien</label>
@@ -123,7 +165,6 @@ export function NewPropertyForm() {
           {errors.name !== '' ? <small className="text-danger">{ errors.name }</small> : null}
           {hasError && errors.name === undefined ? <small className="text-danger">Ce champ est vide</small> : null}
         </div>
-
         <div className="col-md field-container">
           <label className="label" htmlFor="email">* Votre prix fixe</label>
           <input onChange={handleValue} name="price" id="price" type="number" />
@@ -170,23 +211,21 @@ export function NewPropertyForm() {
         </div>
       </div>
 
-      <div className="row">
-        <div className="col-md field-container">
-        </div>
-        <div className="col-md field-container">
+      <div>
+        <div className="field-container">
           <div className="image-container">
-          <label style={{ opacity: 0 }} className="label" htmlFor=""></label>
-            <input onChange={handleValue} type="file" name="image" id="image" />
+            <label style={{ opacity: 0 }} className="label" htmlFor=""></label>
+            <input accept=".png, .jpeg, .jpg" onChange={handleImage} type="file" name="image" id="image" />
 
             <button id="image-clone" className="btn btn-success">Image <FontAwesomeIcon icon={faImage} /></button>
           </div>
         </div>
-        {errors.image !== '' && hasError ? <small className="text-danger">{errors.image}</small> : null}
         {hasError && errors.image === undefined ? <small className="text-danger">Vous de devez choisir au moin une image</small> : null}
-        {values.image !== '' ? <small>{values.image}</small> : null}
+        {values.image !== undefined ? <small>{values.image.name}</small> : null}
       </div>
-      
-      <button type="submit" className="btn btn-info">Envoyer</button>
+      <div className="text-center submit-btn">
+        <button style={{maxWidth: '250px', borderRadius:'20px'}} type="submit" className="btn btn-info">Enregister le bien</button>
+      </div>
     </form>
-  </>
+  </div>
 }

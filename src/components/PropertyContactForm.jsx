@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import '../css/PropertyContactForm.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 const animeLabel = function(elements) {
   elements.forEach(element => {
     element.addEventListener('focusin', () => {
@@ -15,7 +18,8 @@ const animeLabel = function(elements) {
   });
 }
 
-export function PropertyContactForm({context}) {
+export function PropertyContactForm({ context }) {
+  const navigate = useNavigate();
   const [values, setvalues] = useState({});
   const [hasError, sethaserror] = useState(false);
   const [errors, seterrors] = useState({});
@@ -49,7 +53,7 @@ export function PropertyContactForm({context}) {
     let error = '';
     switch (name) {
       case 'name':
-        if (value.length < 4) {
+        if (value.length < 2) {
           error = 'Le nom doit contenir au moin 4 lettres';
           event.target.setAttribute('style', 'border-color: red');
           event.target.previousElementSibling.setAttribute('style', 'color: red');
@@ -59,11 +63,15 @@ export function PropertyContactForm({context}) {
           event.target.setAttribute('style', 'border-color: silver');
         }
         break;
-      case 'phoneNumber':
+      case 'tel':
         if (value === '') {
           error = 'Vous avez laissé le numero vide';
           event.target.setAttribute('style', 'border-color: red');
           event.target.previousElementSibling.setAttribute('style', 'color: red');
+        } else {
+          error = '';
+          event.target.previousElementSibling.setAttribute('style', 'color: grey');
+          event.target.setAttribute('style', 'border-color: silver');
         }
         break;
       default:
@@ -77,27 +85,49 @@ export function PropertyContactForm({context}) {
 
   /**
    * 
-   * @param {event} e 
+   * @param {event} e
    */
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async e => {
+    await e.preventDefault();
     // check if error is empty and values arn't empty
     if (!Object.keys(values).some(v => v === 'message')) {
       // if message is not defined or empty -> set ''
-      setvalues({
-        ...values,
-        ['message']: ''
-      });
+      values.message = '';
     }
     if (Object.values(errors).every(e => e === '') && Object.values(values).length === 4) {
       // the message field is not required
       // check the context
       switch (context) {
+        // ADD-PROPERTY FROM CLIENT
         case 'add-property':
-          console.log('add-property', values);
+          try {
+            const response = await axios({
+              url: 'http://localhost:5000/property/add-client',
+              data: values,
+              method: 'POST'
+            });
+            if (response.data.dataIsValid) {
+              await window.localStorage.setItem('Authorization', response.data.token);
+              // if client data is valid => redirect
+              await navigate(`/add-check-id/${response.data.token}`);
+            }
+          } catch (error) {
+            console.log(error);
+          }
           break;
+        
+        // ADD-CONTACT FROM COSTUMER
         case 'contact':
-          console.log('contact', values);
+          try {
+            const response = await axios({
+              url: 'http://localhost:5000/property/add-client',
+              data: values,
+              method: 'POST'
+            });
+            
+          } catch (error) {
+            console.log(error);
+          }
           break;
         default:
           break;
@@ -114,7 +144,7 @@ export function PropertyContactForm({context}) {
     animeLabel(fields);
     animeLabel(textarea);
   }, []);
-  return <>
+  return <div className="my-form">
     <form onSubmit={handleSubmit}>
       <div className="field-container">
         <label className="label" htmlFor="name">* Votre nom</label>
@@ -129,9 +159,9 @@ export function PropertyContactForm({context}) {
       </div>
       <div className="field-container">
         <label className="label" htmlFor="phone-number">* tel</label>
-        <input onChange={handleValue} name="phoneNumber" id="phone-number" type="text" />
-        {errors.phoneNumber !== '' ? <small className="text-danger">{errors.phoneNumber}</small> : null}
-        {errors.phoneNumber === undefined && hasError ? <small className="text-danger">Un numero de est obligatoir</small> : null}
+        <input onChange={handleValue} name="tel" id="phone-number" type="text" />
+        {errors.tel !== '' ? <small className="text-danger">{errors.tel}</small> : null}
+        {errors.tel === undefined && hasError ? <small className="text-danger">Un numero de est obligatoir</small> : null}
         
       </div>
       <div className="field-container">
@@ -140,5 +170,5 @@ export function PropertyContactForm({context}) {
       </div>
       <button type="submit" className="btn btn-info">Envoyer</button>
     </form>
-  </>
+  </div>
 }
