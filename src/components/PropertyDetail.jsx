@@ -1,11 +1,35 @@
-import React from 'react';
+import {useState, useEffect} from 'react';
 import { Carousel, Image } from 'react-bootstrap';
 import { NavbarApp } from './NavBarApp';
 import '../css/PropertyDetail.css';
 import { Footer } from './Footer';
-import { PropertyContactForm } from './PropertyContactForm';;
+import { PropertyContactForm } from './PropertyContactForm';
+import axios from "axios";
+import {useParams, useNavigate} from "react-router-dom";
 
-export function PropertyDetail() {
+export function PropertyDetail({handleTitle}) {
+  const navigate = useNavigate();
+  const id = useParams();
+  const [property, setProperty] = useState({});
+  const [propertyId, setPropertyId] = useState({});
+
+  useEffect( async() => {
+    handleTitle("bien");
+    await loadProperty(id.id);
+  }, []);
+
+  const loadProperty = async (id) => {
+    try {
+      const resProperty = await axios ({
+        url: `http://localhost:5000/property/${id}`,
+        method: 'GET'
+      });
+      setProperty(resProperty.data.property);
+    } catch (e) {
+      navigate("*");
+    }
+  }
+
   return <>
     <NavbarApp isPropertyDetail={true} />
     <div className="text-center prop-detail-container">
@@ -19,36 +43,31 @@ export function PropertyDetail() {
       <div className="container-fluid row m-0 mt-5">
         <div className="col details  pr-5 pl-5">
           <div className="row">
-            <div className="col.lg">
-              <h1 style={{ color: 'rgb(63, 0, 0)' }}>Maison de la haute</h1>
+            <div className="col-md">
+              <h1 style={{ color: 'rgb(63, 0, 0)' }}>{property.name}</h1>
             </div>
-            <div className="col-lg">
-              <h1 style={{color: 'rgb(116, 0, 0)'}} >400000$</h1>
+            <div className="col-md">
+              <h1 style={{color: 'rgb(116, 0, 0)'}} >{property.price} $</h1>
             </div>
           </div>
           <div className="row mt-5">
             <h5 className="col text-info">Surface</h5>
-            <h5 className="col text-secondary">50m<sup>2</sup></h5>
+            <h5 className="col text-secondary">{property.surface} m<sup>2</sup></h5>
           </div>
           <hr className="m-0 mb-3" />
           <div className="row">
             <h5 className="col text-info">Chambre</h5>
-            <h5 className="col text-secondary">5</h5>
+            <h5 className="col text-secondary">{property.room}</h5>
           </div>
           <hr className="m-0 mb-3" />
           <div className="row">
             <h5 className="col text-info">Etage</h5>
-            <h5 className="col text-secondary">2</h5>
-          </div>
-          <hr className="m-0 mb-3" />
-          <div className="row">
-            <h5 className="col text-info">Salle de bain</h5>
-            <h5 className="col text-secondary">2</h5>
+            <h5 className="col text-secondary">{property.floor}</h5>
           </div>
           <hr className="m-0 mb-3" />
           <div className="row">
             <h5 className="col text-info">Localisation</h5>
-            <h5 className="col text-secondary">Marseille</h5>
+            <h5 className="col text-secondary">{property.localisation}</h5>
           </div>
           <hr className="m-0 mb-3" />
         </div>

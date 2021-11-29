@@ -33,6 +33,10 @@ const PropertySchema = new mongoose.Schema({
   image: {
     type: String,
     required: true
+  },
+  localisation: {
+    type: String,
+    required: true
   }
 });
 

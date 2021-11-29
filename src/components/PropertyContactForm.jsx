@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import '../css/PropertyContactForm.css';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 const animeLabel = function(elements) {
   elements.forEach(element => {
@@ -25,13 +25,13 @@ export function PropertyContactForm({ context }) {
   const [errors, seterrors] = useState({});
 
   /**
-   * 
-   * @param {event} event 
+   *
+   * @param {event} event
    */
   const handleValue = (event) => {
     const value = event.target.value;
     const name = event.target.name;
-    
+
     // handle the changes to the values obj
     handleError(event, name, value);
 
@@ -44,7 +44,7 @@ export function PropertyContactForm({ context }) {
   }
 
   /**
-   * 
+   *
    * @param {event} event for set style of element in error case
    * @param {string} name element name
    * @param {string} value element value
@@ -84,7 +84,7 @@ export function PropertyContactForm({ context }) {
   }
 
   /**
-   * 
+   *
    * @param {event} e
    */
   const handleSubmit = async e => {
@@ -107,7 +107,7 @@ export function PropertyContactForm({ context }) {
               method: 'POST'
             });
             if (response.data.dataIsValid) {
-              await window.localStorage.setItem('Authorization', response.data.token);
+              await window.sessionStorage.setItem('Authorization', response.data.token);
               // if client data is valid => redirect
               await navigate(`/add-check-id/${response.data.token}`);
             }
@@ -115,7 +115,7 @@ export function PropertyContactForm({ context }) {
             console.log(error);
           }
           break;
-        
+
         // ADD-CONTACT FROM COSTUMER
         case 'contact':
           try {
@@ -124,7 +124,7 @@ export function PropertyContactForm({ context }) {
               data: values,
               method: 'POST'
             });
-            
+
           } catch (error) {
             console.log(error);
           }
@@ -137,7 +137,7 @@ export function PropertyContactForm({ context }) {
     }
   }
 
-  
+
   useEffect(() => {
     const fields = document.querySelectorAll('input');
     const textarea = document.querySelectorAll('textarea');
@@ -162,7 +162,7 @@ export function PropertyContactForm({ context }) {
         <input onChange={handleValue} name="tel" id="phone-number" type="text" />
         {errors.tel !== '' ? <small className="text-danger">{errors.tel}</small> : null}
         {errors.tel === undefined && hasError ? <small className="text-danger">Un numero de est obligatoir</small> : null}
-        
+
       </div>
       <div className="field-container">
         <label htmlFor="message" className="label">* Message</label>

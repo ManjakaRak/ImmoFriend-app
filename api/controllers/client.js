@@ -8,7 +8,6 @@ const _generateSecretKey = () => {
   for (let i = 0; i < 6; i++) {
     outputSecretKey.push(longChar[Math.ceil(Math.random() * longChar.length)]);
   }
-
   return outputSecretKey.join('');
 
 }

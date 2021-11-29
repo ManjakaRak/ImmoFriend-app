@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { Banier } from "./Banier";
-import { Footer } from './Footer';
+import {useEffect, useState} from "react";
+import {Banier} from "./Banier";
+import {Footer} from './Footer';
 import '../css/CheckKey.css';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 
 export function FetchSecretId(props) {
@@ -27,11 +27,11 @@ export function FetchSecretId(props) {
       });
       if (response.data.verified) {
         // use a new token from server and pass it on next page
-        window.localStorage.setItem('Authorization', response.data.token);
+        window.sessionStorage.setItem('Authorization', response.data.token);
         /**
-         * send USER DATA on localStorage and get it on adding property page
-         * we use JSON.strigify coz localStorage store string not obj */ 
-        window.localStorage.setItem('Client-Data', JSON.stringify(response.data.clientData));
+         * send USER DATA on sessionStorage and get it on adding property page
+         * we use JSON.strigify coz sessionStorage store string not obj */
+        window.sessionStorage.setItem('Client-Data', JSON.stringify(response.data.clientData));
         // redirect to add-property and verify the token above on load
         navigate(`/add-property/${response.data.token}`);
       } else {
@@ -41,7 +41,7 @@ export function FetchSecretId(props) {
       console.log(error)
     }
   }
-  
+
   const getTokenFromUrl = (pathname) => {
     // take the token from url
     const array = pathname.split('/');
@@ -49,10 +49,10 @@ export function FetchSecretId(props) {
   }
   const checkIfUserHaveAccess = () => {
     // check if token is valid on page loading
-    const token = window.localStorage.getItem('Authorization');
+    const token = window.sessionStorage.getItem('Authorization');
     token !== getTokenFromUrl(window.location.pathname) ? navigate("*") : null
   }
-  
+
   useEffect(() => {
     checkIfUserHaveAccess();
     props.handleSetTitle('Ajout de bien');

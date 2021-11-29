@@ -18,13 +18,14 @@ export function AddPropertyForClient({ handleSetTitle }) {
 
   const checkIfUserHaveAccess = () => {
     // check if token is valid on page loading
-    const token = window.localStorage.getItem('Authorization');
+    const token = window.sessionStorage.getItem('Authorization');
+    // if not valid redirect to home page
     token !== getTokenFromUrl(window.location.pathname) ? navigate("*") : null
   }
 
   const fetchClientData = () => {
-    const clientFromLocalStorage = window.localStorage.getItem('Client-Data');
-    return JSON.parse(clientFromLocalStorage);
+    const clientFromSessionStorage = window.sessionStorage.getItem('Client-Data');
+    return JSON.parse(clientFromSessionStorage);
   }
   useEffect(() => {
     checkIfUserHaveAccess();

@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import '../css/NewPropertyForm.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export function NewPropertyForm({ clientData }) {
-
+  const navigate = useNavigate();
   // animation label
   const animeLabel = function(elements) {
     elements.forEach(element => {
@@ -28,8 +29,8 @@ export function NewPropertyForm({ clientData }) {
   const [errors, seterrors] = useState({});
 
   /**
-   * 
-   * @param {event} event 
+   *
+   * @param {event} event
    */
   const handleValue = (event) => {
     let value = event.target.value;
@@ -59,7 +60,7 @@ export function NewPropertyForm({ clientData }) {
   }
 
   /**
-   * 
+   *
    * @param {event} event for set style of element in error case
    * @param {string} name element name
    * @param {string} value element value
@@ -108,12 +109,11 @@ export function NewPropertyForm({ clientData }) {
 
   // SEND DATA
   /**
-   * 
-   * @param {event} e 
+   *
+   * @param {event} e
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(clientData)
     // check if error is empty and values arn't empty
     if (Object.values(errors).every(e => e === '') && Object.values(values).length === 8) {
 
@@ -128,7 +128,7 @@ export function NewPropertyForm({ clientData }) {
       formData.append('constructionDate', values.constructionDate);
       formData.append('image', values.image);
       formData.append('client', JSON.stringify(clientData));
-      
+
       try {
         const response = await axios({
           url: 'http://localhost:5000/property/add-property',
@@ -138,15 +138,18 @@ export function NewPropertyForm({ clientData }) {
           data: formData,
           method: 'POST'
         });
-        // console.log(response)
+        // Redirect manually after a formData submition
+        if (response) {
+          window.sessionStorage.clear();
+          window.location.pathname = "/";
+        }
       } catch (error) {
+
         console.log(error)
       }
-      // console.log(formData);
     } else {
-      // dont submit
+      // don t submit
       sethaserror(true);
-      console.log('smth wrong');
     }
   }
 

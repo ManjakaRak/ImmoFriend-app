@@ -31,11 +31,6 @@ app.use(upload.any());
  */
 app.use('/', routers);
 
-app.post('/uploadFile', (req, res) => {
-  console.log('data saved');
-})
-
-
 /**
  * SERVER CONFIGURATION
  */
