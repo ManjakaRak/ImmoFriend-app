@@ -38,6 +38,7 @@ const controller = {
       res.status(400).send(error);
     }
   },
+
   // insert new property with his owner
   addProperty: async (req, res) => {
     const { name, price, surface, room, floor, localisation, constructionDate } = req.body;
@@ -46,6 +47,8 @@ const controller = {
     const propertyObj = {
       name, price, surface, room, floor, localisation, constructionDate, image: metaDataImg.filename
     }
+
+    // last verif before registration
     const clientObj = JSON.parse(req.body.client);
 
     // save all data on database

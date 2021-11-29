@@ -40,6 +40,8 @@ const PropertySchema = new mongoose.Schema({
   }
 });
 
+
+
 /**
  * export propertySchema NOT model ~
  * 'coz we need to embed this obj to a parent one {CLIENT} ~

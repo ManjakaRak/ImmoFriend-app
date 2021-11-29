@@ -18,7 +18,7 @@ const ClientSchema = mongoose.Schema({
     required: true
   },
   tel: {
-    type: Number,
+    type: String,
     required: true
   },
   message: {

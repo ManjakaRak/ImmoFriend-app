@@ -81,13 +81,9 @@ export function NewPropertyForm({ clientData }) {
         parseInt(value) < 10 || parseInt(value) > 500 || value === '' ? error = 'La surface doit être comprise entre 10 et 500' : null;
         break;
       case 'room':
-        values.floor !== undefined && parseInt(value) || value === '' < parseInt(values.floor) ?
-          error = 'Le nombre de chambre doit etre superieur ou egal à celle du d\'etage' : null
-          parseInt(value) === 0 ? error = 'Le nombre doit etre superieur a 0' : null;
+        parseInt(value) === 0 ? error = 'Le nombre doit etre superieur a 0' : null;
         break;
       case 'floor':
-        values.room !== undefined && parseInt(value) > parseInt(values.room) ?
-          error = 'Le nombre de chambre doit etre superieur ou egal à celle du d\'etage' : null;
         parseInt(value) === 0 ? error = 'Le nombre doit etre superieur a 0' : null;
         break;
       case 'constructionDate':
@@ -136,15 +132,25 @@ export function NewPropertyForm({ clientData }) {
             'Content-Type': 'application/json'
           },
           data: formData,
-          method: 'POST'
+          method: 'POST',
+          onUploadProgress: e => {
+            if (e.lengthComputable) {
+              console.log(e)
+            }
+          },
         });
-        // Redirect manually after a formData submition
-        if (response) {
-          window.sessionStorage.clear();
-          window.location.pathname = "/";
-        }
-      } catch (error) {
+        /**
+         * @very_important_to_prevent_FormData_refrech
+         */
+        return false;
 
+        console.log(response)
+        // Redirect manually after a formData submition
+        // if (response) {
+        //   window.sessionStorage.clear();
+        //   window.location.pathname = "/";
+        // }
+      } catch (error) {
         console.log(error)
       }
     } else {
