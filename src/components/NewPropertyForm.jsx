@@ -36,8 +36,6 @@ export function NewPropertyForm({ clientData }) {
     let value = event.target.value;
     const name = event.target.name;
 
-    // remove fakepath
-    // name === 'image' ? value = event.target.files[0] : null
     // handle the changes to the values obj
     handleError(event, name, value);
 
@@ -75,21 +73,28 @@ export function NewPropertyForm({ clientData }) {
         }
         break;
       case 'price':
+        value === '' ? error = 'Vous deviez renseigner un prix ' : null;
         parseInt(value) < 1000 || value === ''  ? error = 'Le prix est beaucoup trop bas' : null;
         break;
       case 'surface':
+        value === '' ? error = 'Vous deviez renseigner une surface ' : null;
         parseInt(value) < 10 || parseInt(value) > 500 || value === '' ? error = 'La surface doit être comprise entre 10 et 500' : null;
         break;
       case 'room':
+        value === '' ? error = 'Vous deviez renseigner le nombre de chambre ' : null;
         parseInt(value) === 0 ? error = 'Le nombre doit etre superieur a 0' : null;
         break;
       case 'floor':
+        value === '' ? error = 'Vous deviez renseigner le nombre d\'etage ' : null;
         parseInt(value) === 0 ? error = 'Le nombre doit etre superieur a 0' : null;
         break;
       case 'constructionDate':
         let fdate = new Date(value);
         let now = new Date();
         fdate > now ? error = 'Verifiez la date de construction': null
+        break;
+      case 'description':
+        value.length > 200 ? error = 'Votre description est trop longue': null
         break;
       case 'image':
         value === null ? error = "Ajoutez une photo" : null
@@ -110,48 +115,62 @@ export function NewPropertyForm({ clientData }) {
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // set description === "" (empty not undefined)
+    values.description === undefined ? values.description = '' : null;
     // check if error is empty and values arn't empty
-    if (Object.values(errors).every(e => e === '') && Object.values(values).length === 8) {
-
-      // image and file only can be send in formData NOT in object
-      const formData = new FormData();
-      formData.append('name', values.name);
-      formData.append('price', values.price);
-      formData.append('surface', values.surface);
-      formData.append('room', values.room);
-      formData.append('floor', values.floor);
-      formData.append('localisation', values.localisation);
-      formData.append('constructionDate', values.constructionDate);
-      formData.append('image', values.image);
-      formData.append('client', JSON.stringify(clientData));
-
-      try {
-        const response = await axios({
-          url: 'http://localhost:5000/property/add-property',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          data: formData,
-          method: 'POST',
-          onUploadProgress: e => {
-            if (e.lengthComputable) {
-              console.log(e)
-            }
-          },
+    if (Object.values(errors).every(e => e === '') && Object.values(values).length === 9) {
+      if (values.room < values.floor) {
+        sethaserror(true);
+        const error = "La chambre doit etre supirieur a l'etage";
+        seterrors({
+          ...errors,
+          ['room']: error
         });
-        /**
-         * @very_important_to_prevent_FormData_refrech
-         */
-        return false;
+        console.log('error on room')
+      } else {
+        // image and file only can be send in formData NOT in object
+        const formData = new FormData();
+        formData.append('name', values.name);
+        formData.append('price', values.price);
+        formData.append('surface', values.surface);
+        formData.append('room', values.room);
+        formData.append('floor', values.floor);
+        formData.append('localisation', values.localisation);
+        formData.append('constructionDate', values.constructionDate);
+        formData.append('description', values.description);
+        formData.append('image', values.image);
+        formData.append('client', JSON.stringify(clientData));
 
-        console.log(response)
-        // Redirect manually after a formData submition
-        // if (response) {
-        //   window.sessionStorage.clear();
-        //   window.location.pathname = "/";
-        // }
-      } catch (error) {
-        console.log(error)
+        try {
+          // const response = await axios({
+          //   url: 'http://localhost:5000/property/add-property',
+          //   headers: {
+          //     'Content-Type': 'application/json'
+          //   },
+          //   data: formData,
+          //   method: 'POST',
+          //   onUploadProgress: e => {
+          //     if (e.lengthComputable) {
+          //       console.log(e)
+          //     }
+          //   },
+          // });
+          /**
+           * @very_important_to_prevent_FormData_refrech
+           */
+          console.log(values);
+          return false;
+
+          console.log(response)
+          // Redirect manually after a formData submition
+          // if (response) {
+          //   window.sessionStorage.clear();
+          //   window.location.pathname = "/";
+          // }
+        } catch (error) {
+          console.log(error)
+        }
       }
     } else {
       // don t submit
@@ -220,19 +239,25 @@ export function NewPropertyForm({ clientData }) {
         </div>
       </div>
 
-      <div>
-        <div className="field-container">
-          <div className="image-container">
-            <label style={{ opacity: 0 }} className="label" htmlFor=""></label>
-            <input accept=".png, .jpeg, .jpg" onChange={handleImage} type="file" name="image" id="image" />
+      <div className="row mb-4">
+        <div className={"col-md"}>
+          <div className="field-container">
+            <div className="image-container">
+              <label style={{ opacity: 0 }} className="label" htmlFor=""></label>
+              <input accept=".png, .jpeg, .jpg" onChange={handleImage} type="file" name="image" id="image" />
 
-            <button id="image-clone" className="btn btn-success">Image <FontAwesomeIcon icon={faImage} /></button>
+              <button id="image-clone" className="btn btn-success">Image <FontAwesomeIcon icon={faImage} /></button>
+            </div>
           </div>
+          {hasError && errors.image === undefined ? <small className="text-danger">Vous de devez choisir au moin une image</small> : null}
+          {values.image !== undefined ? <small>{values.image.name}</small> : null}
         </div>
-        {hasError && errors.image === undefined ? <small className="text-danger">Vous de devez choisir au moin une image</small> : null}
-        {values.image !== undefined ? <small>{values.image.name}</small> : null}
+        <div className="col-md field-container">
+          <label className="label" htmlFor="description">* Description du bien</label>
+          <textarea onChange={handleValue} name="description" id="desc" cols="30" rows="10" style={{border: '1px solid silber'}} ></textarea>
+        </div>
       </div>
-      <div className="text-center submit-btn">
+      <div className="text-center col-md submit-btn">
         <button style={{maxWidth: '250px', borderRadius:'20px'}} type="submit" className="btn btn-info">Enregister le bien</button>
       </div>
     </form>

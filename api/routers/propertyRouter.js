@@ -1,21 +1,7 @@
 const routers = require('express').Router();
 const { getProperties, addProperty, getProperty } = require('../controllers/property');
 const { addClient, verifySecretKey } = require('../controllers/client');
-const multer = require('multer');
-
-const upload = multer({
-  storage: multer.diskStorage({
-    // middleware
-    destination: (req, file, next) => {
-      next(null, '../public/uploads');
-    },
-    filename: (req, file, next) => {
-      // get file extension from file
-      const ext = file.mimetype.split('/')[1];
-      next(null, `${file.fieldname}-${Date.now()}.${ext}`);
-    }
-  })
-});
+const upload = require('../utils/multer');
 
 routers.get('/', getProperties);
 routers.get('/property/:id', getProperty);

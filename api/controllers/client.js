@@ -78,8 +78,14 @@ const controller = {
 
     // check if email is successfuly send
     try {
-      const emailSendSuccessfuly = sendMail();
+      // const emailSendSuccessfully = await sendMail(); => PROD
+      /**
+       * here we need to start SMTP SERVER MAILDEV for catch local email
+       * @type {Promise<void>}
+       */
+      const emailSendSuccessfully = sendMail(); // Allow sending all email(valid or not) for dev only
       res.json({ 'dataIsValid': true, 'token': token});
+      // console.log(emailSendSuccessfuly)
     } catch (e) {
       res.status(400).json({'msg': 'Error on finding email'});
     }

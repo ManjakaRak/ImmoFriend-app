@@ -37,6 +37,9 @@ const PropertySchema = new mongoose.Schema({
   localisation: {
     type: String,
     required: true
+  },
+  description: {
+    type: String,
   }
 });
 
