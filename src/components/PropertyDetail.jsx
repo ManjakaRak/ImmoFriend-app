@@ -1,8 +1,8 @@
 import {useState, useEffect} from 'react';
 import { Carousel, Image } from 'react-bootstrap';
-import { NavbarApp } from './NavBarApp';
+import { NavbarApp } from './_partials/NavBarApp';
 import '../css/PropertyDetail.css';
-import { Footer } from './Footer';
+import { Footer } from './_partials/Footer';
 import { PropertyContactForm } from './Form/PropertyContactForm';
 import axios from "axios";
 import {useParams, useNavigate} from "react-router-dom";

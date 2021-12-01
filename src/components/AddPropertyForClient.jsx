@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Banier } from "./Banier";
-import { Footer } from './Footer';
+import { Banier } from "./_partials/Banier";
+import { Footer } from './_partials/Footer';
 import { NewPropertyForm } from "./Form/NewPropertyForm";
 
 export function AddPropertyForClient({ handleSetTitle }) {

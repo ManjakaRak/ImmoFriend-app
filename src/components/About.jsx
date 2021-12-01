@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Container } from 'react-bootstrap';
-import { Banier } from './Banier';
-import { Footer } from './Footer';
+import { Banier } from './_partials/Banier';
+import { Footer } from './_partials/Footer';
 
 
 export function About({ handleSetTitle }) {

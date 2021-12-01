@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import '../css/PropertyCard.css';
-import { PropertyCard } from './PropertyCard';
+import { PropertyCard } from './_partials/PropertyCard';
 import axios from 'axios';
 
 const options = {

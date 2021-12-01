@@ -3,7 +3,7 @@ import { Carousel } from 'react-bootstrap';
 import { NavbarApp } from './NavBarApp';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import '../css/Banier.css';
+import '../../css/Banier.css';
 
 function Next() {
   return <FontAwesomeIcon style={{fontSize: '30px' ,color: '#ffc107'}} icon={faArrowRight}/>

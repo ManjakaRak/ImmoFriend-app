@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
-import '../css/NavbarApp.css';
+import '../../css/NavbarApp.css';
 
 export function NavbarApp({ currentPage, isPropertyDetail }) {
 
@@ -29,9 +29,6 @@ export function NavbarApp({ currentPage, isPropertyDetail }) {
           </Nav.Item>
            <Nav.Item className="p-3">
             <Link to="/add-client"><span className={currentPage === 'add-property' ? 'active' : null}>Ajoutez</span></Link>
-          </Nav.Item>
-          <Nav.Item className="p-3">
-            <Link to="/about"><span className={currentPage === 'about' ? 'active' : null}>A propos</span></Link>
           </Nav.Item>
         </Nav>
       </Navbar.Collapse>

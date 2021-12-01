@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { Banier } from "./Banier";
-import { Footer } from './Footer';
+import { Banier } from "./_partials/Banier";
+import { Footer } from './_partials/Footer';
 // import '../css/PropertyContactForm.css';
 import { PropertyContactForm } from "./Form/PropertyContactForm";
 

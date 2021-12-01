@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
-import {Banier} from "./Banier";
-import {Footer} from './Footer';
+import {Banier} from "./_partials/Banier";
+import {Footer} from './_partials/Footer';
 import '../css/CheckKey.css';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';

@@ -1,6 +1,6 @@
-import {Banier} from "../Banier";
+import {Banier} from "../_partials/Banier";
 import {useEffect} from "react";
-import {Footer} from "../Footer";
+import {Footer} from "../_partials/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faCheck} from "@fortawesome/free-solid-svg-icons";
 

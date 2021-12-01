@@ -1,7 +1,7 @@
-import {Banier} from "../Banier";
+import {Banier} from "../_partials/Banier";
 import {Container} from "react-bootstrap";
-import {Footer} from "../Footer";
-import {NavbarApp} from "../NavBarApp";
+import {Footer} from "../_partials/Footer";
+import {NavbarApp} from "../_partials/NavBarApp";
 
 export function PageNotFound() {
   return <>
