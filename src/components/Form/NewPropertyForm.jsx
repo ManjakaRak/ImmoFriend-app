@@ -122,10 +122,6 @@ export function NewPropertyForm({ clientData }) {
       if (propertyValues.room < propertyValues.floor) {
         const error = "La chambre doit etre supirieur a l'etage";
         await sethaserror(true);
-        await setPropertyValues({
-          ...propertyValues,
-          ['room']: ''
-        })
         await seterrors({
           ...errors,
           ['room']: error

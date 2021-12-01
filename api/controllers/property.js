@@ -31,9 +31,9 @@ const controller = {
    * @param res
    * @returns {Promise<void>}
    */
-  getProperties: async (_, res) => {
+  getProperties: async (_, res) => { // !SOLD
     try {
-      const properties = await Client.find({}).select('property');
+      const properties = await Client.find({'property.sold': false}).select('property');
       res.send(properties);
     } catch (error) {
       res.status(400).send(error);
@@ -65,7 +65,7 @@ const controller = {
       await clientProperty.save();
       res.send({ save: true });
     } catch (errorOnSave) {
-      res.status(400).send(errorOnSave);
+      res.status(400).send({errorOnSave});
     }
   },
 

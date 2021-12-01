@@ -34,7 +34,7 @@ const ClientSchema = mongoose.Schema({
 // CUSTOM VALIDATION FOR CLIENT
 
 ClientSchema.path('name').validate(v => {
-  if (v.length > 15) {
+  if (v.length > 100) {
     throw new Error('Le nom est trop long');
   }
   return true;

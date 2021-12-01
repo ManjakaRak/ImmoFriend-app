@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const mailer = require('nodemailer');
+const Client = require('../models/Client');
 
 const _generateSecretKey = () => {
   const longChar = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
@@ -103,19 +104,16 @@ const controller = {
     // when auth is done => register the client
   },
 
+  /**
+   *
+   * @param req
+   * @param res
+   * @returns {Promise<void>}
+   */
   clientHaveCustomer: async (req, res) => {
     // about customer
     const {name, email, tel, message, property} = req.body;
     // build the entire information about property and his owner
-    // const aboutProperty = {
-    //   property,
-    //   owner: {
-    //     name,
-    //     email,
-    //     tel,
-    //     message
-    //   }
-    // }
     const bodyMessage = `
         <h4 style="color: dodgerblue; font-family: 'Courier New'">Vous avez un client!!!<h4>
         <p style="color: gray; font-family: 'sans-serif'">${name} souhaite vous contacter à propos de votre propriété <span style="color: darkred">${property.name}</span></p>
@@ -141,7 +139,12 @@ const controller = {
         object: 'Notification',
         html: bodyMessage
       }, );
-      success ? emailIsSend = true : null
+      success ? emailIsSend = true : null;
+      await Client.updateOne({'property._id': property._id}, {
+        $set: {
+          'property.sold': true
+        }
+      });
       res.send({emailIsSend});
     } catch (e) {
       res.status(500).send({errorMsg: 'erreur on server'});
