@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import '../css/NewPropertyForm.css';
+import '../../css/NewPropertyForm.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export function NewPropertyForm({ clientData }) {
-  const navigate = useNavigate();
+  const [hasError, sethaserror] = useState(false);
+  const [errors, seterrors] = useState({});
+  const [propertyValues, setPropertyValues] = useState({});
   // animation label
   const animeLabel = function(elements) {
     elements.forEach(element => {
@@ -24,9 +26,6 @@ export function NewPropertyForm({ clientData }) {
   }
 
 
-  const [values, setvalues] = useState({});
-  const [hasError, sethaserror] = useState(false);
-  const [errors, seterrors] = useState({});
 
   /**
    *
@@ -40,8 +39,8 @@ export function NewPropertyForm({ clientData }) {
     handleError(event, name, value);
 
     // handle change
-    setvalues({
-      ...values,
+    setPropertyValues({
+      ...propertyValues,
       [name]: value
     });
   }
@@ -51,8 +50,8 @@ export function NewPropertyForm({ clientData }) {
 
     handleError(event, name, value);
     // handle change
-    setvalues({
-      ...values,
+    setPropertyValues({
+      ...propertyValues,
       [name]: value
     });
   }
@@ -94,7 +93,7 @@ export function NewPropertyForm({ clientData }) {
         fdate > now ? error = 'Verifiez la date de construction': null
         break;
       case 'description':
-        value.length > 200 ? error = 'Votre description est trop longue': null
+        value.length > 10000 ? error = 'Votre description est trop longue': null
         break;
       case 'image':
         value === null ? error = "Ajoutez une photo" : null
@@ -117,57 +116,50 @@ export function NewPropertyForm({ clientData }) {
     e.preventDefault();
 
     // set description === "" (empty not undefined)
-    values.description === undefined ? values.description = '' : null;
+    propertyValues.description === undefined ? propertyValues.description = '' : null;
     // check if error is empty and values arn't empty
-    if (Object.values(errors).every(e => e === '') && Object.values(values).length === 9) {
-      if (values.room < values.floor) {
-        sethaserror(true);
+    if (Object.values(errors).every(e => e === '') && Object.values(propertyValues).length === 9) {
+      if (propertyValues.room < propertyValues.floor) {
         const error = "La chambre doit etre supirieur a l'etage";
-        seterrors({
+        await sethaserror(true);
+        await setPropertyValues({
+          ...propertyValues,
+          ['room']: ''
+        })
+        await seterrors({
           ...errors,
           ['room']: error
         });
-        console.log('error on room')
       } else {
         // image and file only can be send in formData NOT in object
         const formData = new FormData();
-        formData.append('name', values.name);
-        formData.append('price', values.price);
-        formData.append('surface', values.surface);
-        formData.append('room', values.room);
-        formData.append('floor', values.floor);
-        formData.append('localisation', values.localisation);
-        formData.append('constructionDate', values.constructionDate);
-        formData.append('description', values.description);
-        formData.append('image', values.image);
+        formData.append('name', propertyValues.name);
+        formData.append('price', propertyValues.price);
+        formData.append('surface', propertyValues.surface);
+        formData.append('room', propertyValues.room);
+        formData.append('floor', propertyValues.floor);
+        formData.append('localisation', propertyValues.localisation);
+        formData.append('constructionDate', propertyValues.constructionDate);
+        formData.append('description', propertyValues.description);
+        formData.append('image', propertyValues.image);
         formData.append('client', JSON.stringify(clientData));
 
         try {
-          // const response = await axios({
-          //   url: 'http://localhost:5000/property/add-property',
-          //   headers: {
-          //     'Content-Type': 'application/json'
-          //   },
-          //   data: formData,
-          //   method: 'POST',
-          //   onUploadProgress: e => {
-          //     if (e.lengthComputable) {
-          //       console.log(e)
-          //     }
-          //   },
-          // });
+          await axios({
+            url: 'http://localhost:5000/property/add-property',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            data: formData,
+            method: 'POST'
+          });
           /**
            * @very_important_to_prevent_FormData_refrech
            */
-          console.log(values);
-          return false;
-
-          console.log(response)
           // Redirect manually after a formData submition
-          // if (response) {
-          //   window.sessionStorage.clear();
-          //   window.location.pathname = "/";
-          // }
+          await window.sessionStorage.clear();
+          window.location.pathname = await "/thanks-new-property";
+          return false;
         } catch (error) {
           console.log(error)
         }
@@ -232,6 +224,7 @@ export function NewPropertyForm({ clientData }) {
         </div>
 
         <div className="col-md field-container">
+          <label className={"text-secondary"}>* Date de Construction</label>
           <label style={{opacity: 0}} className="label">* Date de Construction</label>
           <input style={{color: 'gray'}} onChange={handleValue} type="date" name="constructionDate" id="construction-date" />
           {errors.constructionDate !== '' && hasError ? <small className="text-danger">{errors.constructionDate}</small> : null}
@@ -250,7 +243,7 @@ export function NewPropertyForm({ clientData }) {
             </div>
           </div>
           {hasError && errors.image === undefined ? <small className="text-danger">Vous de devez choisir au moin une image</small> : null}
-          {values.image !== undefined ? <small>{values.image.name}</small> : null}
+          {propertyValues.image !== undefined ? <small>{propertyValues.image.name}</small> : null}
         </div>
         <div className="col-md field-container">
           <label className="label" htmlFor="description">* Description du bien</label>

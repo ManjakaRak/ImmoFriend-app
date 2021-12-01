@@ -101,6 +101,51 @@ const controller = {
     const newToken = jwt.sign({key : this._generatedKey }, process.env.JWT_SECRET_KEY);
     res.send({ verified: isVerified, token: newToken, clientData: this._clientData });
     // when auth is done => register the client
+  },
+
+  clientHaveCustomer: async (req, res) => {
+    // about customer
+    const {name, email, tel, message, property} = req.body;
+    // build the entire information about property and his owner
+    // const aboutProperty = {
+    //   property,
+    //   owner: {
+    //     name,
+    //     email,
+    //     tel,
+    //     message
+    //   }
+    // }
+    const bodyMessage = `
+        <h4 style="color: dodgerblue; font-family: 'Courier New'">Vous avez un client!!!<h4>
+        <p style="color: gray; font-family: 'sans-serif'">${name} souhaite vous contacter à propos de votre propriété <span style="color: darkred">${property.name}</span></p>
+        <p style="color: gray; font-family: 'sans-serif'">Vous pouvez le contactez par téléphone: <span style="color: dodgerblue">${tel}</span> ou par mail <span style="color: dodgerblue">${email}</span></p>
+        <p style="color: gray; font-family: 'sans-serif'">${message !== '' ? 'Message: '+message : null}</p>
+    `;
+    /**
+     * send an email to property's owner
+     */
+    const transporter = mailer.createTransport({
+      host: 'localhost',
+      port: 1025,
+      secure: false,
+      tls: {
+        rejectUnauthorized: false
+      }
+    });
+    let emailIsSend = false;
+    try {
+      const success = await transporter.sendMail({
+        from: 'test@server',
+        to: email,
+        object: 'Notification',
+        html: bodyMessage
+      }, );
+      success ? emailIsSend = true : null
+      res.send({emailIsSend});
+    } catch (e) {
+      res.status(500).send({errorMsg: 'erreur on server'});
+    }
   }
 }
 

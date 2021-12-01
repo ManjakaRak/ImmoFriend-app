@@ -8,6 +8,8 @@ import { AddPropertyForClient } from './components/AddPropertyForClient';
 import { AddClient } from './components/AddClient';
 import { FetchSecretId } from './components/FetchSecretId';
 import {PageNotFound} from "./components/errors/PageNotFound";
+import {ThanksNewProperty} from "./components/thanks/ThanksNewProperty";
+import {ThanksNewCustomer} from './components/thanks/ThanksNewCustomer';
 
 const App = () => {
   const [title, setTitle] = useState('');
@@ -25,6 +27,8 @@ const App = () => {
         <Route path="/property">
           <Route exact path=":id" element={<PropertyDetail handleTitle={setTitle} />}/>
         </Route>
+        <Route exact path="/thanks-new-property" element={<ThanksNewProperty />}/>
+        <Route exact path="/thanks-new-customer" element={<ThanksNewCustomer />}/>
         <Route path="*" element={ <PageNotFound /> }/>
       </Routes>
     </Router>

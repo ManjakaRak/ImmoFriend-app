@@ -40,10 +40,12 @@ const PropertySchema = new mongoose.Schema({
   },
   description: {
     type: String,
+  },
+  sold: {
+    type: Boolean,
+    default: false
   }
 });
-
-
 
 /**
  * export propertySchema NOT model ~

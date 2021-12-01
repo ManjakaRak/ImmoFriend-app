@@ -1,9 +1,15 @@
 import {useEffect, useState} from 'react';
-import '../css/PropertyContactForm.css';
+import '../../css/PropertyContactForm.css';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 
-const animeLabel = function(elements) {
+export function PropertyContactForm({ context, property }) {
+  const navigate = useNavigate();
+  const [values, setvalues] = useState({});
+  const [hasError, sethaserror] = useState(false);
+  const [errors, seterrors] = useState({});
+
+  const animeLabel = function(elements) {
   elements.forEach(element => {
     element.addEventListener('focusin', () => {
       element.previousElementSibling.classList.remove('label');
@@ -17,12 +23,6 @@ const animeLabel = function(elements) {
     });
   });
 }
-
-export function PropertyContactForm({ context }) {
-  const navigate = useNavigate();
-  const [values, setvalues] = useState({});
-  const [hasError, sethaserror] = useState(false);
-  const [errors, seterrors] = useState({});
 
   /**
    *
@@ -118,17 +118,23 @@ export function PropertyContactForm({ context }) {
 
         // ADD-CONTACT FROM COSTUMER
         case 'contact':
+          values.property = await property;
+          // make a request
           try {
             const response = await axios({
-              url: 'http://localhost:5000/property/add-client',
-              data: values,
-              method: 'POST'
+              url: 'http://localhost:5000/contact',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              method: 'post',
+              data: values
             });
-
-          } catch (error) {
-            console.log(error);
+            response.data.emailIsSend ? navigate('/thanks-new-customer') : null;
+          } catch (e) {
+            console.log(e);
           }
           break;
+
         default:
           break;
       }
@@ -143,6 +149,9 @@ export function PropertyContactForm({ context }) {
     const textarea = document.querySelectorAll('textarea');
     animeLabel(fields);
     animeLabel(textarea);
+    return function () {
+      setvalues({});
+    }
   }, []);
   return <div className="my-form">
     <form onSubmit={handleSubmit}>

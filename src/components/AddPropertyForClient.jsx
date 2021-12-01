@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Banier } from "./Banier";
 import { Footer } from './Footer';
-import { NewPropertyForm } from "./NewPropertyForm";
+import { NewPropertyForm } from "./Form/NewPropertyForm";
 
 export function AddPropertyForClient({ handleSetTitle }) {
   const [client, setClient] = useState({});

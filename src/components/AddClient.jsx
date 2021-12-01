@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Banier } from "./Banier";
 import { Footer } from './Footer';
 // import '../css/PropertyContactForm.css';
-import { PropertyContactForm } from "./PropertyContactForm";
+import { PropertyContactForm } from "./Form/PropertyContactForm";
 
 export function AddClient({ handleSetTitle }) {
   useEffect(() => {

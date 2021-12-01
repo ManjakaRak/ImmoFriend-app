@@ -3,7 +3,7 @@ import { Carousel, Image } from 'react-bootstrap';
 import { NavbarApp } from './NavBarApp';
 import '../css/PropertyDetail.css';
 import { Footer } from './Footer';
-import { PropertyContactForm } from './PropertyContactForm';
+import { PropertyContactForm } from './Form/PropertyContactForm';
 import axios from "axios";
 import {useParams, useNavigate} from "react-router-dom";
 
@@ -11,7 +11,6 @@ export function PropertyDetail({handleTitle}) {
   const navigate = useNavigate();
   const id = useParams();
   const [property, setProperty] = useState({});
-  const [propertyId, setPropertyId] = useState({});
 
   useEffect( async() => {
     handleTitle("bien");
@@ -36,7 +35,7 @@ export function PropertyDetail({handleTitle}) {
       <div className="carousel-container">
         <Carousel nextLabel="" prevLabel="">
           <Carousel.Item>
-            <Image src={`${process.env.PUBLIC_URL}/img/image1.jpg`} />
+            <Image src={`${process.env.PUBLIC_URL}/uploads/${property.image}`} />
           </Carousel.Item>
         </Carousel>
       </div>
@@ -71,17 +70,15 @@ export function PropertyDetail({handleTitle}) {
           </div>
           <hr className="m-0 mb-3" />
         </div>
-        <div className="col description pr-5 pl-5">
-          <h2 className="text-right">Description</h2>
-          <p className="text-justify text-secondary">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dicta optio perferendis atque, enim eos expedita nisi, magni obcaecati ab quidem veritatis doloremque amet corporis. Nulla incidunt assumenda saepe dolorum maiores?Lorem, ipsum dolor sit amet consectetur adipisicing elit. Veniam corporis similique soluta. Architecto cumque quae aliquid dignissimos blanditiis repellendus iusto fugit ducimus, officia ipsa nesciunt veniam nisi adipisci tempora reprehenderit?Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat quas consequuntur ipsam, quis ipsum, soluta similique at, dicta quia quos quisquam adipisci! Possimus assumenda voluptate doloribus aliquam ipsa impedit sed!
-          </p>
+        <div className="text-center col description pr-5 pl-5">
+          <h2>Description</h2>
+          <p className="text-center text-secondary">{property.description}</p>
         </div>
       </div>
       {/* FORM */}
       <div className="mt-5 mb-5 form">
         <h3 style={{ color: 'grey' }} className="mb-4">Faites-nous signe si ce bien vous interèsse</h3>
-        <PropertyContactForm context='contact'/>
+        <PropertyContactForm context='contact' property={property}/>
       </div>
     </div>
     <Footer />
