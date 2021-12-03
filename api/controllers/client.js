@@ -41,7 +41,7 @@ const controller = {
       secure: true,
       auth: {
         user: 'm3t4r4k@gmail.com',
-        pass: 'm3t4r4km3t4'
+        pass: process.env.ACCOUNT_PWD
       }
     });
         

@@ -33,7 +33,6 @@ app.use(dotenv.config(), () => {error ? console.log(error) : null});
 const PORT = process.env.PORT;
 
 
-
 /**
  * DATABASE CONFIGURATION
  */
