@@ -16,6 +16,7 @@ const _generateSecretKey = () => {
 const controller = {
   _generatedKey: '',
   _clientData: {},
+
   /**
    * create a token on first client submit to access on VERIFY-TOKEN section
    */
@@ -32,28 +33,29 @@ const controller = {
      * we use configuration for dev env => sending email on local smtp server (maildev)
      *
      * @prod_env
-     * const transporter = mailer.createTransport({
-     *   host: 'HOST',
-     *   port: 'PORT',
-     *   secure: false,
-     *   auth: {
-     *     user: 'USER',
-     *     pass: 'PASSWORD'
-     *   }
-     * });
-     *
      */
-
-    // transporter for nodemailer
+     
     const transporter = mailer.createTransport({
-      host: 'localhost',
-      port: 1025,
-      secure: false,
-      // unable all securisation for dev
-      tls: {
-        rejectUnauthorized: false
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: 'm3t4r4k@gmail.com',
+        pass: 'm3t4r4km3t4'
       }
     });
+        
+
+    // transporter for nodemailer
+    // const transporter = mailer.createTransport({
+    //   host: 'localhost',
+    //   port: 1025,
+    //   secure: false,
+    //   // unable all securisation for dev
+    //   tls: {
+    //     rejectUnauthorized: false
+    //   }
+    // });
 
     // sending mail with OBJECT inside
     /**
@@ -64,12 +66,12 @@ const controller = {
         /**
          * @on_prod replace with email'admin
          */
-        from: "test@server.com",
+        from: "m3t4r4k@gmail.com",
 
         /**
          * @on_prod replace with {email} client variable
          */
-        to: "test@client.com",
+        to: email,
 
         object: "Clè secrète",
         text: this._generatedKey
@@ -84,11 +86,11 @@ const controller = {
        * here we need to start SMTP SERVER MAILDEV for catch local email
        * @type {Promise<void>}
        */
-      const emailSendSuccessfully = sendMail(); // Allow sending all email(valid or not) for dev only
+      const emailSendSuccessfully = await sendMail(); // Allow sending all email(valid or not) for dev only
       res.json({ 'dataIsValid': true, 'token': token});
-      // console.log(emailSendSuccessfuly)
     } catch (e) {
       res.status(400).json({'msg': 'Error on finding email'});
+      console.log(e)
     }
   },
   /**
@@ -147,7 +149,7 @@ const controller = {
       });
       res.send({emailIsSend});
     } catch (e) {
-      res.status(500).send({errorMsg: 'erreur on server'});
+      res.status(400).send({errorMsg: 'impossible d\'accéder à votre email'});
     }
   }
 }

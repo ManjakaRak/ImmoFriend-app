@@ -3,6 +3,10 @@ const routers = require('./routers/propertyRouter');
 const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
 const cors = require('cors');
+const dotenv = require('dotenv');
+const path = require('path');
+const serveStatic = require('serve-static');
+
 
 
 // cors
@@ -14,6 +18,7 @@ app.use(bodyparser.json(), bodyparser.urlencoded({ extended: true }));
 /**
  * router
  */
+// app.use('/', serveStatic('../build'));
 app.use('/', routers);
 
 /**
@@ -21,7 +26,6 @@ app.use('/', routers);
  */
 
 // VAR ENV
-const dotenv = require('dotenv');
 app.use(dotenv.config(), () => {error ? console.log(error) : null});
 
 

@@ -2,13 +2,20 @@ import {useEffect, useState} from 'react';
 import '../../css/PropertyContactForm.css';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import {useForm} from "./useForm";
+import {Alert} from "react-bootstrap";
 
 export function PropertyContactForm({ context, property }) {
-  const navigate = useNavigate();
   const [values, setvalues] = useState({});
-  const [hasError, sethaserror] = useState(false);
   const [errors, seterrors] = useState({});
+  const [hasError, sethaserror] = useState(false);
+  const navigate = useNavigate();
+  const [showNotif, setShowNotif] = useState(true);
 
+  /**
+   * animate label on form
+   * @param elements
+   */
   const animeLabel = function(elements) {
   elements.forEach(element => {
     element.addEventListener('focusin', () => {
@@ -112,7 +119,13 @@ export function PropertyContactForm({ context, property }) {
               await navigate(`/add-check-id/${response.data.token}`);
             }
           } catch (error) {
-            console.log(error);
+            /**
+             * add an error from server
+             */
+            await seterrors({
+              ...errors,
+              ['fromServer']: error.response.data.msg
+            });
           }
           break;
 
@@ -131,7 +144,11 @@ export function PropertyContactForm({ context, property }) {
             });
             response.data.emailIsSend ? navigate('/thanks-new-customer') : null;
           } catch (e) {
-            console.log(e);
+            seterrors({
+              ...errors,
+              ['server']: e.response.data.errorMsg
+            })
+            // errors.server = e.response.data.errorMsg;
           }
           break;
 
@@ -143,15 +160,16 @@ export function PropertyContactForm({ context, property }) {
     }
   }
 
+  const closeNotification = () => {
+    setShowNotif(false);
+    console.log(showNotif)
+  }
 
   useEffect(() => {
     const fields = document.querySelectorAll('input');
     const textarea = document.querySelectorAll('textarea');
     animeLabel(fields);
     animeLabel(textarea);
-    return function () {
-      setvalues({});
-    }
   }, []);
   return <div className="my-form">
     <form onSubmit={handleSubmit}>
@@ -177,6 +195,15 @@ export function PropertyContactForm({ context, property }) {
         <label htmlFor="message" className="label">* Message</label>
         <textarea onChange={handleValue} name="message" id="message"></textarea>
       </div>
+      {
+        errors.fromServer &&
+          <Alert show={showNotif} variant={'danger'}>
+            <button onClick={closeNotification} className={"close"} type={"button"} data-dismiss={"alert"} aria-label={"Close"} >
+              <span aria-hidden={"true"}>&times;</span>
+            </button>
+            L'email est introuvable
+          </Alert>
+      }
       <button type="submit" className="btn btn-info">Envoyer</button>
     </form>
   </div>

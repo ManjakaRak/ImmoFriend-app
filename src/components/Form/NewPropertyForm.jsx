@@ -26,7 +26,6 @@ export function NewPropertyForm({ clientData }) {
   }
 
 
-
   /**
    *
    * @param {event} event
