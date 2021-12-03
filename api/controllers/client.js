@@ -34,28 +34,28 @@ const controller = {
      *
      * @prod_env
      */
-     
-    const transporter = mailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: 'm3t4r4k@gmail.com',
-        pass: process.env.ACCOUNT_PWD
-      }
-    });
+    // const transporter = mailer.createTransport({
+    //   service: 'Gmail',
+    //   host: 'smtp.gmail.com',
+    //   port: 465,
+    //   secure: true,
+    //   auth: {
+    //     user: 'm3t4r4k@gmail.com',
+    //     pass: process.env.ACCOUNT_PWD
+    //   }
+    // });
         
 
     // transporter for nodemailer
-    // const transporter = mailer.createTransport({
-    //   host: 'localhost',
-    //   port: 1025,
-    //   secure: false,
-    //   // unable all securisation for dev
-    //   tls: {
-    //     rejectUnauthorized: false
-    //   }
-    // });
+    const transporter = mailer.createTransport({
+      host: 'localhost',
+      port: 1025,
+      secure: false,
+      // unable all securisation for dev
+      tls: {
+        rejectUnauthorized: false
+      }
+    });
 
     // sending mail with OBJECT inside
     /**
@@ -66,7 +66,7 @@ const controller = {
         /**
          * @on_prod replace with email'admin
          */
-        from: "m3t4r4k@gmail.com",
+        from: "test@server.com",
 
         /**
          * @on_prod replace with {email} client variable
